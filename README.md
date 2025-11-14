@@ -21,6 +21,20 @@ This module enables customer membership functionality in PrestaShop, allowing cu
 3. Search for "Customer Membership"
 4. Click **Install**
 
+### Verify Module Structure (Optional but recommended)
+
+Before packaging or deploying the module, you can run the automated structure
+verification script to ensure all of the required files for PrestaShop 8.2 are
+present:
+
+```bash
+php tools/verify_module_structure.php
+```
+
+The script checks for the main module file, configuration metadata, Composer
+settings, translation scaffolding, and compatibility declarations so you can
+quickly confirm that the module complies with PrestaShop 8.2 expectations.
+
 ## Configuration
 
 ### Step 1: Set Up Membership Product
