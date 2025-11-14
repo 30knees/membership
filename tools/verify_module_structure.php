@@ -96,15 +96,27 @@ if (file_exists($composerPath)) {
         }
 
         $autoloadPsr4 = (array) ($composerData['autoload']['psr-4'] ?? []);
-        foreach ($autoloadPsr4 as $directory) {
-            $dir = rtrim($directory, '/');
-            $path = $moduleRoot . DIRECTORY_SEPARATOR . $dir;
-            add_check(
-                $checks,
-                sprintf('Autoload PSR-4 directory "%s" exists', $dir),
-                is_dir($path),
-                is_dir($path) ? null : 'Create the directory or update composer.json autoload section.'
-            );
+        foreach ($autoloadPsr4 as $namespace => $directories) {
+            foreach ((array) $directories as $directory) {
+                if (!is_string($directory) || $directory === '') {
+                    add_check(
+                        $checks,
+                        sprintf('Autoload PSR-4 mapping "%s" has a valid directory entry', (string) $namespace),
+                        false,
+                        'Invalid directory value in composer.json autoload section.'
+                    );
+                    continue;
+                }
+
+                $dir = rtrim($directory, "/\\");
+                $path = $moduleRoot . DIRECTORY_SEPARATOR . $dir;
+                add_check(
+                    $checks,
+                    sprintf('Autoload PSR-4 directory "%s" exists', $dir),
+                    is_dir($path),
+                    is_dir($path) ? null : 'Create the directory or update composer.json autoload section.'
+                );
+            }
         }
 
         $classmap = (array) ($composerData['autoload']['classmap'] ?? []);
